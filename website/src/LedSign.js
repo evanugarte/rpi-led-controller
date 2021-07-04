@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { healthCheck, updateSignText } from './ApiFunctions/LedSign';
 import { Spinner, Input, Button, Container } from 'reactstrap';
 import './led-sign.css';
-import Header from './Header/Header';
 
 function LedSign(props) {
   const [signHealthy, setSignHealthy] = useState(false);
@@ -62,10 +61,7 @@ function LedSign(props) {
       onChange: e => setScrollSpeed(e.target.value)
     }
   ];
-  const headerProps = {
-    title: 'LED Sign'
-  };
-console.log({scrollSpeed});
+
   async function handleSend() {
     setAwaitingSignResponse(true);
     const signResponse = await updateSignText({
@@ -96,8 +92,7 @@ console.log({scrollSpeed});
   useEffect(() => {
     async function checkSignHealth() {
       setLoading(true);
-      const status = await healthCheck('props.user.firstName');
-      console.log('after', {status});
+      const status = await healthCheck();
       if (status && !status.error) {
         setSignHealthy(true);
         const { responseData } = status;
@@ -130,7 +125,6 @@ console.log({scrollSpeed});
 
   return (
     <div>
-      <Header {...headerProps} />
       <div className='sign-wrapper'>
         <Container>
           <h1 className='sign-status'>

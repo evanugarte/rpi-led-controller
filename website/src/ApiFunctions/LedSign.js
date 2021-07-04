@@ -8,14 +8,12 @@ import axios from 'axios';
  */
 export async function healthCheck() {
   let status = {};
-  console.log('woo');
   await axios
     .get('/health-check')
     .catch(err => {
       status.responseData = err;
       status.error = true;
     });
-    console.log(status);
   return status;
 }
 
