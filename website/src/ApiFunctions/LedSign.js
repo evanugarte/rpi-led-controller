@@ -9,7 +9,7 @@ import axios from 'axios';
 export async function healthCheck() {
   let status = {};
   await axios
-    .get('/health-check')
+    .get('/api/health-check')
     .catch(err => {
       status.responseData = err;
       status.error = true;
@@ -27,7 +27,7 @@ export async function healthCheck() {
 export async function updateSignText(signData) {
   let status = {};
   await axios
-    .post('/update-sign', { ...signData })
+    .post('/api/update-sign', { ...signData })
     .then(res => {
       status = res.data;
     })

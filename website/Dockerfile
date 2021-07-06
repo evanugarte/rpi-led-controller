@@ -1,14 +1,16 @@
-FROM node:alpine as builder
+FROM arm32v7/node:16-alpine3.11 as builder
 
 WORKDIR /frontend
 
 COPY package.json ./
 
-RUN npm install --production
+COPY package-lock.json ./
+
+RUN npm install
 
 COPY . ./
 
-RUN npm run build --production
+RUN npm run build
 
 FROM nginx:alpine
 

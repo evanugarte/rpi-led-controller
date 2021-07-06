@@ -1,0 +1,30 @@
+version: '2'
+services:
+  server:
+    container_name: server
+    build:
+      context: ./server
+      dockerfile: ./Dockerfile
+    ports:
+      - '8080:8080'
+    restart: 'on-failure'
+    networks:
+      - local
+    privileged: true
+  website:
+    container_name: website
+    build:
+      context: ./website
+      dockerfile: ./Dockerfile
+    ports:
+      - '3000:80'
+    restart: 'on-failure'
+    networks:
+      - local
+networks:
+  local:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.16.0.0/24
+          gateway: 172.16.0.254

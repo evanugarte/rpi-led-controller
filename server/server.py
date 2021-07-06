@@ -11,19 +11,17 @@ app = Flask(__name__)
 def hex_to_rgb(hex_value):
     return ",".join([str(int(hex_value[i:i+2], 16)) for i in (0, 2, 4)])
 
-@app.route("/health-check", methods=["GET"])
+@app.route("/api/health-check", methods=["GET"])
 def health_check():
     return "Sign is up!" 
 
-@app.route("/update-sign", methods=["POST", "GET"])
+@app.route("/api/update-sign", methods=["POST", "GET"])
 def hello_world():
     global proc
     postvars = request.json
     CURRENT_DIRECTORY = path.dirname(path.abspath(__file__)) + sep
     if proc != None:
-        print("killing process")
         proc.kill()
-
     if len(postvars):
         command = [
             CURRENT_DIRECTORY + "text-scroller",
