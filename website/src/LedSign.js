@@ -95,14 +95,14 @@ function LedSign(props) {
       const status = await healthCheck();
       if (status && !status.error) {
         setSignHealthy(true);
-        const { responseData } = status;
-        if (responseData && responseData.text) {
-          setText(responseData.text);
-          setBrightness(responseData.brightness);
-          setScrollSpeed(responseData.scrollSpeed);
-          setBackgroundColor(responseData.backgroundColor);
-          setTextColor(responseData.textColor);
-          setBorderColor(responseData.borderColor);
+        const { message } = status;
+        if (message) {
+          setText(message.text);
+          // setBrightness(message.brightness);
+          setScrollSpeed(message.scrollSpeed);
+          setBackgroundColor(message.backgroundColor);
+          setTextColor(message.textColor);
+          setBorderColor(message.borderColor);
         }
       } else {
         setSignHealthy(false);

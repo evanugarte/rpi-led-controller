@@ -17,6 +17,7 @@ def hex_to_rgb(hex_value):
 
 @app.route("/api/health-check", methods=["GET"])
 def health_check():
+    global sign_message
     if sign_message:
         return jsonify(sign_message.to_dict())
     else:
@@ -27,6 +28,7 @@ def health_check():
 @app.route("/api/update-sign", methods=["POST", "GET"])
 def hello_world():
     global proc
+    global sign_message
     data = request.json
     CURRENT_DIRECTORY = path.dirname(path.abspath(__file__)) + sep
     if proc != None:
