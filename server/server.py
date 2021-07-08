@@ -14,7 +14,6 @@ app = Flask(__name__)
 def hex_to_rgb(hex_value):
     return ",".join([str(int(hex_value[i:i+2], 16)) for i in (0, 2, 4)])
 
-
 @app.route("/api/health-check", methods=["GET"])
 def health_check():
     global sign_message
