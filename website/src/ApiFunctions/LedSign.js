@@ -10,6 +10,13 @@ export async function healthCheck() {
   let status = {};
   await axios
     .get('/api/health-check')
+    .then(({ data }) => {
+      const { success, ...maybeData } = data;
+      status.error = !success;
+      if (maybeData.existingMessage) {
+        status.message = { ...maybeData };
+      }
+    })
     .catch(err => {
       status.responseData = err;
       status.error = true;
