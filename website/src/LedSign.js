@@ -76,7 +76,6 @@ function LedSign(props) {
       email: 'props.user.email',
       firstName: 'props.user.firstName'
     });
-    console.log('response');
     setRequestSuccessful(!signResponse.error);
     showTurnOff(!signResponse.error);
     setAwaitingSignResponse(false);
