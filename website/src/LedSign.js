@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { healthCheck, updateSignText } from './ApiFunctions/LedSign';
-import { Spinner, Input, Button, Container } from 'reactstrap';
+import { healthCheck, updateSignText, turnOffSign } from './ApiFunctions/LedSign';
+import { Spinner, Input, Button, Container, Row } from 'reactstrap';
 import './led-sign.css';
 
 function LedSign(props) {
@@ -14,6 +14,8 @@ function LedSign(props) {
   const [borderColor, setBorderColor] = useState('#000000');
   const [awaitingSignResponse, setAwaitingSignResponse] = useState(false);
   const [requestSuccessful, setRequestSuccessful] = useState();
+  const [turnOff, showTurnOff] = useState(false);
+
   const inputArray = [
     {
       title: 'Sign Text:',
@@ -75,6 +77,7 @@ function LedSign(props) {
       firstName: 'props.user.firstName'
     });
     setRequestSuccessful(!signResponse.error);
+    showTurnOff(!signResponse.error);
     setAwaitingSignResponse(false);
   }
 
@@ -103,6 +106,7 @@ function LedSign(props) {
           setBackgroundColor(message.backgroundColor);
           setTextColor(message.textColor);
           setBorderColor(message.borderColor);
+          showTurnOff(true);
         }
       } else {
         setSignHealthy(false);
@@ -140,13 +144,26 @@ function LedSign(props) {
             </div>
           );
         })}
-        <Button
-          id='led-sign-send'
-          onClick={handleSend}
-          disabled={loading || !signHealthy || awaitingSignResponse}
-        >
-          {awaitingSignResponse ? <Spinner /> : 'Send'}
-        </Button>
+        <Row>
+          <Button
+            id='led-sign-send'
+            onClick={handleSend}
+            disabled={loading || !signHealthy || awaitingSignResponse}
+          >
+            {awaitingSignResponse ? <Spinner /> : 'Send'}
+          </Button>
+          {turnOff && <Button
+            id='led-sign-send'
+            onClick={
+              () => turnOffSign().then(({ error }) => {
+                showTurnOff(!!error);
+                setRequestSuccessful(undefined);
+              })
+            }
+          >
+            Turn sign off
+          </Button>}
+        </Row>
         {renderRequestStatus()}
       </div>
     </div>
