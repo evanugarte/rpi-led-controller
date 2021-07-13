@@ -6,7 +6,7 @@ import { fields } from './schema.json';
 import SignForm from './SignForm';
 import './index.css';
 
-  ReactDOM.render(
+ReactDOM.render(
   <React.StrictMode>
     <SignForm {...{ fields }} />
   </React.StrictMode>,
