@@ -1,12 +1,14 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import LedSign from './LedSign';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
+import { fields } from './schema.json';
+import SignForm from './SignForm';
+import './index.css';
 
-ReactDOM.render(
+  ReactDOM.render(
   <React.StrictMode>
-    <LedSign />
+    <SignForm {...{ fields }} />
   </React.StrictMode>,
   document.getElementById('root')
 );

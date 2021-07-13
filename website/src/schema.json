@@ -1,0 +1,43 @@
+{
+  "fields": [
+    {
+      "name": "text",
+      "type": "text",
+      "title": "Sign Text",
+      "additionalProps": {
+        "maxLength": "50",
+        "placeholder": "Enter Text"
+      }
+    },
+    {
+      "name": "backgroundColor",
+      "type": "color",
+      "title": "Background Color"
+    },
+    {
+      "name": "textColor",
+      "type": "color",
+      "title": "Text Color",
+      "additionalProps": {
+        "maxLength": "50",
+        "defaultValue": "#ffffff"
+      }
+    },
+    {
+      "name": "borderColor",
+      "type": "color",
+      "title": "Border Color"
+    },
+    {
+      "name": "scrollSpeed",
+      "type": "range",
+      "title": "Scroll Speed",
+      "additionalProps": {
+        "id": "scroll-speed",
+        "min": "1",
+        "max": "20",
+        "step": "1"
+      }
+    }
+  ]
+}
