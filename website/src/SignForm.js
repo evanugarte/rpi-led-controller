@@ -47,7 +47,7 @@ export default function SignForm(props) {
       setSignHealthy(true);
       const { message } = status;
       if (message) {
-        setSignData(message);
+        setSignData({...message});
         showTurnOff(true);
       }
     } else {
@@ -57,7 +57,6 @@ export default function SignForm(props) {
   }
 
   useEffect(() => {
-    checkSignHealth();
     props.fields.forEach((field) => {
       let copy = signData;
       copy[field.name] = field.additionalProps
@@ -65,6 +64,7 @@ export default function SignForm(props) {
       setSignData(copy);
       field.onChange = (value) => updateSignData(field.name, value);
     });
+    checkSignHealth();
     // eslint-disable-next-line
   }, []);
 
@@ -119,6 +119,7 @@ export default function SignForm(props) {
             onClick={
               () => turnOffSign().then(({ error }) => {
                 showTurnOff(!!error);
+                setSignData({});
                 setRequestSuccessful(undefined);
               })
             }
