@@ -12,21 +12,26 @@
     {
       "name": "backgroundColor",
       "type": "color",
-      "title": "Background Color"
+      "title": "Background Color",
+      "additionalProps": {
+        "defaultValue": "#000000"
+      }
     },
     {
       "name": "textColor",
       "type": "color",
       "title": "Text Color",
       "additionalProps": {
-        "maxLength": "50",
         "defaultValue": "#ffffff"
       }
     },
     {
       "name": "borderColor",
       "type": "color",
-      "title": "Border Color"
+      "title": "Border Color",
+      "additionalProps": {
+        "defaultValue": "#000000"
+      }
     },
     {
       "name": "scrollSpeed",
@@ -36,7 +41,8 @@
         "id": "scroll-speed",
         "min": "1",
         "max": "20",
-        "step": "1"
+        "step": "1",
+        "defaultValue": "10"
       }
     }
   ]

@@ -3,7 +3,7 @@ import {
   healthCheck,
   updateSignText,
   turnOffSign
-} from './ApiFunctions/ApiFunctions';
+} from './ApiFunctions/LedSign';
 import {
   Spinner,
   Input,
@@ -59,6 +59,10 @@ export default function SignForm(props) {
   useEffect(() => {
     checkSignHealth();
     props.fields.forEach((field) => {
+      let copy = signData;
+      copy[field.name] = field.additionalProps
+        ? field.additionalProps.defaultValue || '' : '';
+      setSignData(copy);
       field.onChange = (value) => updateSignData(field.name, value);
     });
     // eslint-disable-next-line
