@@ -56,8 +56,7 @@ export default function SignForm(props) {
     setLoading(false);
   }
 
-  useEffect(() => {
-    checkSignHealth();
+  function initializeSignData() {
     if (!Object.keys(signData).length) {
       let copy = signData;
       props.fields.forEach(({ name, additionalProps }) => {
@@ -65,6 +64,11 @@ export default function SignForm(props) {
       });
       setSignData(copy);
     }
+  }
+
+  useEffect(() => {
+    initializeSignData();
+    checkSignHealth();
     // eslint-disable-next-line
   }, []);
 
@@ -93,7 +97,7 @@ export default function SignForm(props) {
             {renderSignHealth()}
           </h1>
         </Container>
-        {props.fields && props.fields.map((input, index) => {
+        {!loading && props.fields && props.fields.map((input, index) => {
           const { defaultValue, ...otherProps } = input.additionalProps;
           return (
             <div key={index} className='full-width'>
@@ -101,7 +105,7 @@ export default function SignForm(props) {
               <Input
                 disabled={loading || !signHealthy}
                 type={input.type}
-                defaultValue={signData[input.name] || defaultValue}
+                defaultValue={signData[input.name]}
                 onChange={(e) => updateSignData(input.name, e.target.value)}
                 {...otherProps}
               />
@@ -121,7 +125,7 @@ export default function SignForm(props) {
             onClick={
               () => turnOffSign().then(({ error }) => {
                 showTurnOff(!!error);
-                setSignData({});
+                initializeSignData();
                 setRequestSuccessful(undefined);
               })
             }
