@@ -57,13 +57,11 @@ export default function SignForm(props) {
   }
 
   function initializeSignData() {
-    if (!Object.keys(signData).length) {
-      let copy = signData;
-      props.fields.forEach(({ name, additionalProps }) => {
-        copy[name] = additionalProps.defaultValue || '';
-      });
-      setSignData(copy);
-    }
+    let copy = signData;
+    props.fields.forEach(({ name, additionalProps }) => {
+      copy[name] = additionalProps.defaultValue || '';
+    });
+    setSignData(copy);
   }
 
   useEffect(() => {
@@ -123,11 +121,16 @@ export default function SignForm(props) {
           {turnOff && <Button
             id='led-sign-send'
             onClick={
-              () => turnOffSign().then(({ error }) => {
-                showTurnOff(!!error);
-                initializeSignData();
-                setRequestSuccessful(undefined);
-              })
+              () => {
+                setLoading(true);
+                turnOffSign()
+                  .then(({ error }) => {
+                    showTurnOff(!!error);
+                    initializeSignData();
+                    setRequestSuccessful(undefined);
+                  })
+                  .finally(() => setLoading(false));
+              }
             }
           >
             Turn sign off
