@@ -57,14 +57,14 @@ export default function SignForm(props) {
   }
 
   useEffect(() => {
-    props.fields.forEach((field) => {
-      let copy = signData;
-      copy[field.name] = field.additionalProps
-        ? field.additionalProps.defaultValue || '' : '';
-      setSignData(copy);
-      field.onChange = (value) => updateSignData(field.name, value);
-    });
     checkSignHealth();
+    if (!Object.keys(signData).length) {
+      let copy = signData;
+      props.fields.forEach(({ name, additionalProps }) => {
+        copy[name] = additionalProps.defaultValue || '';
+      });
+      setSignData(copy);
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -94,14 +94,16 @@ export default function SignForm(props) {
           </h1>
         </Container>
         {props.fields && props.fields.map((input, index) => {
+          const { defaultValue, ...otherProps } = input.additionalProps;
           return (
             <div key={index} className='full-width'>
               <label>{input.title}</label>
               <Input
                 disabled={loading || !signHealthy}
                 type={input.type}
-                onChange={(e) => input.onChange(e.target.value)}
-                {...input.additionalProps}
+                defaultValue={signData[input.name] || defaultValue}
+                onChange={(e) => updateSignData(input.name, e.target.value)}
+                {...otherProps}
               />
             </div>
           );
