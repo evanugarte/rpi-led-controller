@@ -3,7 +3,7 @@ import {
   healthCheck,
   updateSignText,
   turnOffSign
-} from './ApiFunctions/ApiFunctions';
+} from './ApiFunctions/LedSign';
 import {
   Spinner,
   Input,
@@ -47,7 +47,7 @@ export default function SignForm(props) {
       setSignHealthy(true);
       const { message } = status;
       if (message) {
-        setSignData(message);
+        setSignData({...message});
         showTurnOff(true);
       }
     } else {
@@ -58,9 +58,13 @@ export default function SignForm(props) {
 
   useEffect(() => {
     checkSignHealth();
-    props.fields.forEach((field) => {
-      field.onChange = (value) => updateSignData(field.name, value);
-    });
+    if (!Object.keys(signData).length) {
+      let copy = signData;
+      props.fields.forEach(({ name, additionalProps }) => {
+        copy[name] = additionalProps.defaultValue || '';
+      });
+      setSignData(copy);
+    }
     // eslint-disable-next-line
   }, []);
 
@@ -90,14 +94,16 @@ export default function SignForm(props) {
           </h1>
         </Container>
         {props.fields && props.fields.map((input, index) => {
+          const { defaultValue, ...otherProps } = input.additionalProps;
           return (
             <div key={index} className='full-width'>
               <label>{input.title}</label>
               <Input
                 disabled={loading || !signHealthy}
                 type={input.type}
-                onChange={(e) => input.onChange(e.target.value)}
-                {...input.additionalProps}
+                defaultValue={signData[input.name] || defaultValue}
+                onChange={(e) => updateSignData(input.name, e.target.value)}
+                {...otherProps}
               />
             </div>
           );
@@ -115,6 +121,7 @@ export default function SignForm(props) {
             onClick={
               () => turnOffSign().then(({ error }) => {
                 showTurnOff(!!error);
+                setSignData({});
                 setRequestSuccessful(undefined);
               })
             }
