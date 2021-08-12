@@ -56,15 +56,17 @@ export default function SignForm(props) {
     setLoading(false);
   }
 
+  function initializeSignData() {
+    let copy = signData;
+    props.fields.forEach(({ name, additionalProps }) => {
+      copy[name] = additionalProps.defaultValue || '';
+    });
+    setSignData(copy);
+  }
+
   useEffect(() => {
+    initializeSignData();
     checkSignHealth();
-    if (!Object.keys(signData).length) {
-      let copy = signData;
-      props.fields.forEach(({ name, additionalProps }) => {
-        copy[name] = additionalProps.defaultValue || '';
-      });
-      setSignData(copy);
-    }
     // eslint-disable-next-line
   }, []);
 
@@ -93,7 +95,7 @@ export default function SignForm(props) {
             {renderSignHealth()}
           </h1>
         </Container>
-        {props.fields && props.fields.map((input, index) => {
+        {!loading && props.fields && props.fields.map((input, index) => {
           const { defaultValue, ...otherProps } = input.additionalProps;
           return (
             <div key={index} className='full-width'>
@@ -101,7 +103,7 @@ export default function SignForm(props) {
               <Input
                 disabled={loading || !signHealthy}
                 type={input.type}
-                defaultValue={signData[input.name] || defaultValue}
+                defaultValue={signData[input.name]}
                 onChange={(e) => updateSignData(input.name, e.target.value)}
                 {...otherProps}
               />
@@ -119,11 +121,16 @@ export default function SignForm(props) {
           {turnOff && <Button
             id='led-sign-send'
             onClick={
-              () => turnOffSign().then(({ error }) => {
-                showTurnOff(!!error);
-                setSignData({});
-                setRequestSuccessful(undefined);
-              })
+              () => {
+                setLoading(true);
+                turnOffSign()
+                  .then(({ error }) => {
+                    showTurnOff(!!error);
+                    initializeSignData();
+                    setRequestSuccessful(undefined);
+                  })
+                  .finally(() => setLoading(false));
+              }
             }
           >
             Turn sign off
