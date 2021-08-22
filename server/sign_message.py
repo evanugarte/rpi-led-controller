@@ -28,6 +28,7 @@ class SignMessage:
         "-C", self.hex_to_rgb(self.text_color),
         "-O", self.hex_to_rgb(self.border_color),
         "-f", self.led_sign_directory + "10x20.bdf",
+        "-y", 5,
         self.text
     ]
 
