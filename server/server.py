@@ -1,8 +1,7 @@
-import subprocess
-from os import sep, path
-from subprocess import call
-import flask
 from flask import Flask, request, jsonify
+from os import sep, path
+import random
+import subprocess
 
 from sign_message import SignMessage
 
@@ -14,6 +13,7 @@ app = Flask(__name__)
 def hex_to_rgb(hex_value):
     return ",".join([str(int(hex_value[i:i+2], 16)) for i in (0, 2, 4)])
 
+
 @app.route("/api/health-check", methods=["GET"])
 def health_check():
     global sign_message
@@ -23,6 +23,25 @@ def health_check():
         return jsonify({
             "success": True
         })
+
+
+@app.route("/api/random", methods=["GET"])
+def random_message():
+    text = subprocess.check_output(
+        "sort -R random.txt | head -n1",
+        shell=True).decode('utf-8').strip().replace("\\", "")
+    text_color = "#%06x" % random.randint(0, 0xFFFFFF)
+    background_color = "#%06x" % random.randint(0, 0xFFFFFF)
+    border_color = "#%06x" % random.randint(0, 0xFFFFFF)
+    return jsonify({
+        "scrollSpeed": 10,
+        "backgroundColor": background_color,
+        "textColor": text_color,
+        "borderColor": border_color,
+        "text": text,
+        "success": True
+    })
+
 
 @app.route("/api/turn-off", methods=["GET"])
 def turn_off():
@@ -36,6 +55,7 @@ def turn_off():
     return jsonify({
         "success": success
     })
+
 
 @app.route("/api/update-sign", methods=["POST"])
 def update_sign():
@@ -57,6 +77,7 @@ def update_sign():
     except:
         sign_message = None
         return "Could not update sign", 500
+
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=8080, debug=True, threaded=True)
