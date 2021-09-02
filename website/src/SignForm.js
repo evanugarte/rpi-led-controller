@@ -2,14 +2,16 @@ import React, { useState, useEffect } from 'react';
 import {
   healthCheck,
   updateSignText,
-  turnOffSign
+  turnOffSign,
+  getRandomInput,
 } from './ApiFunctions/LedSign';
 import {
   Spinner,
   Input,
   Button,
   Container,
-  Row
+  Row,
+  Col,
 } from 'reactstrap';
 
 export default function SignForm(props) {
@@ -18,7 +20,7 @@ export default function SignForm(props) {
   const [signData, setSignData] = useState({});
   const [awaitingSignResponse, setAwaitingSignResponse] = useState(false);
   const [requestSuccessful, setRequestSuccessful] = useState();
-  const [turnOff, showTurnOff] = useState(false);
+  const [turnOff, showTurnOff] = useState(true);
 
   async function handleSend() {
     setAwaitingSignResponse(true);
@@ -47,7 +49,7 @@ export default function SignForm(props) {
       setSignHealthy(true);
       const { message } = status;
       if (message) {
-        setSignData({...message});
+        setSignData({ ...message });
         showTurnOff(true);
       }
     } else {
@@ -111,32 +113,49 @@ export default function SignForm(props) {
           );
         })}
         <Row>
-          <Button
-            id='led-sign-send'
-            onClick={handleSend}
-            disabled={loading || !signHealthy || awaitingSignResponse}
-          >
-            {awaitingSignResponse ? <Spinner /> : 'Send'}
-          </Button>
-          {turnOff && <Button
-            id='led-sign-send'
-            onClick={
-              () => {
-                setLoading(true);
-                turnOffSign()
-                  .then(({ error }) => {
-                    showTurnOff(!!error);
-                    initializeSignData();
-                    setRequestSuccessful(undefined);
-                  })
-                  .finally(() => setLoading(false));
-              }
-            }
-          >
-            Turn sign off
-          </Button>}
+          <Col>
+            <Button
+              className='led-sign-send btn btn-info'
+              onClick={handleSend}
+              disabled={loading || !signHealthy || awaitingSignResponse}
+            >
+              {awaitingSignResponse ? <Spinner /> : 'Send'}
+            </Button>
+          </Col>
+          {turnOff &&
+            <Col>
+              <Button
+                className='led-sign-send btn btn-danger'
+                onClick={
+                  () => {
+                    setLoading(true);
+                    turnOffSign()
+                      .then(({ error }) => {
+                        showTurnOff(!!error);
+                        initializeSignData();
+                        setRequestSuccessful(undefined);
+                      })
+                      .finally(() => setLoading(false));
+                  }
+                }
+              >
+                Turn sign off
+              </Button>
+            </Col>}
         </Row>
         {renderRequestStatus()}
+        <Button
+          className='led-sign-send btn btn-dark'
+          onClick={async () => {
+            setLoading(true);
+            const response = await getRandomInput();
+            if (!response.error) {
+              setSignData({ ...response.responseData });
+            }
+            setLoading(false);
+          }}>
+          Random!
+        </Button>
       </div>
     </div>
   );

@@ -37,3 +37,8 @@ code {
 .sign-unavailable {
   color: red;
 }
+
+.led-sign-send {
+  width: 100%;
+  margin: 10px;
+}

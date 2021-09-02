@@ -42,3 +42,16 @@ export async function updateSignText(signData) {
     });
   return status;
 }
+
+export async function getRandomInput() {
+  let status = {};
+  await axios
+    .get('/api/random')
+    .then(res => {
+      status.responseData = res.data;
+    })
+    .catch(() => {
+      status.error = true;
+    });
+  return status;
+}
