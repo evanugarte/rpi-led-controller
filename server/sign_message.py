@@ -7,9 +7,9 @@ class SignMessage:
   def __init__(self, data, led_sign_directory=CURRENT_DIR):
     self.led_sign_directory = led_sign_directory
     self.scroll_speed = str(data["scrollSpeed"])
-    self.background_color = data["backgroundColor"]
-    self.text_color = data["textColor"]
-    self.border_color = data["borderColor"]
+    self.background_color = data["backgroundColor"][1:]
+    self.text_color = data["textColor"][1:]
+    self.border_color = data["borderColor"][1:]
     self.text = data["text"]
 
   def hex_to_rgb(self, hex_value):
@@ -17,18 +17,14 @@ class SignMessage:
 
   def to_subprocess_command(self):
     return [
-        self.led_sign_directory + "text-scroller",
-        "--led-rows=32",
-        "--led-cols=64",
-        "--led-chain=2",
-        "--led-gpio-mapping=adafruit-hat-pwm",
-        "--led-slowdown-gpio=2",
-        "-s", self.scroll_speed,
-        "-B", self.hex_to_rgb(self.background_color),
-        "-C", self.hex_to_rgb(self.text_color),
-        "-O", self.hex_to_rgb(self.border_color),
-        "-f", self.led_sign_directory + "10x20.bdf",
-        self.text
+        self.led_sign_directory + "sce_sign.exe",
+        "--set-speed", self.scroll_speed + ' px/vsync',
+        "--set-background-color", self.background_color,
+        "--set-font-color", self.text_color,
+        "--set-border-color", self.border_color,
+        "--set-font-filename", self.led_sign_directory + "10x20.bdf",
+        "--set-brightness", "66%", 
+        "--set-text", self.text
     ]
 
   def to_dict(self):
