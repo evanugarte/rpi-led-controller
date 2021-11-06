@@ -4,7 +4,7 @@ Controlling an LED matrix from a website hosted on a raspberry pi
 ## Prerequisites:
 - 2 [64x32 RGB LED Matrix](https://www.adafruit.com/product/2279)
 - [Adafruit RGB Matrix Bonnet for Raspberry Pi](https://www.adafruit.com/product/3211)
-- Any normal size raspberry pi
+- Any normal size raspberry pi (so that the bonnet can fit on top of it)
 
 ## Running the website
 1. Boot your Pi with raspbian and with a network connection
