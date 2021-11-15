@@ -20,7 +20,7 @@ export default function SignForm(props) {
   const [signData, setSignData] = useState({});
   const [awaitingSignResponse, setAwaitingSignResponse] = useState(false);
   const [requestSuccessful, setRequestSuccessful] = useState();
-  const [turnOff, showTurnOff] = useState(true);
+  const [turnOff, showTurnOff] = useState(false);
 
   async function handleSend() {
     setAwaitingSignResponse(true);
