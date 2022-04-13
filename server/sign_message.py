@@ -1,4 +1,4 @@
-from os import sep, path
+from os import getenv, path, sep
 
 CURRENT_DIR = path.dirname(path.abspath(__file__)) + sep
 
@@ -11,16 +11,24 @@ class SignMessage:
     self.text_color = data["textColor"]
     self.border_color = data["borderColor"]
     self.text = data["text"]
+    # predefined LED sign dimesions. See README.md for how to
+    # set these values.
+    self.led_matrix_rows = getenv("LED_MATRIX_ROWS")
+    self.led_matrix_columns = getenv("LED_MATRIX_COLUMNS")
+    self.led_matrix_count = getenv("LED_MATRIX_COUNT")
 
   def hex_to_rgb(self, hex_value):
       return ",".join([str(int(hex_value[i:i+2], 16)) for i in (1, 3, 5)])
 
   def to_subprocess_command(self):
+    led_matrix_count_flag = f"--led-chain={self.led_matrix_count}"
+    led_matrix_rows_flag = f"--led-rows={self.led_matrix_rows}"
+    led_matrix_columns_flag = f"--led-cols={self.led_matrix_columns}"
     return [
         self.led_sign_directory + "text-scroller",
-        "--led-rows=32",
-        "--led-cols=64",
-        "--led-chain=2",
+        led_matrix_count_flag,
+        led_matrix_rows_flag,
+        led_matrix_columns_flag,
         "--led-gpio-mapping=adafruit-hat-pwm",
         "--led-slowdown-gpio=2",
         "-s", self.scroll_speed,
