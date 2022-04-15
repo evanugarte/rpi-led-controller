@@ -8,6 +8,10 @@ services:
     ports:
       - '8080:8080'
     restart: 'on-failure'
+    environment:
+      - LED_MATRIX_ROWS=32
+      - LED_MATRIX_COLUMNS=64
+      - LED_MATRIX_COUNT=2
     networks:
       - local
     privileged: true
