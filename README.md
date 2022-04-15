@@ -8,15 +8,24 @@ Controlling an LED matrix from a website hosted on a raspberry pi
 
 ## Running the website
 1. Boot your Pi with raspbian and with a network connection
-2. Follow the wiring guide from @hzeller ([link](https://github.com/hzeller/rpi-rgb-led-matrix/blob/master/wiring.md))
-3. Install docker and docker-compose
-4. Run the website with:
+1. Follow the wiring guide from @hzeller ([link](https://github.com/hzeller/rpi-rgb-led-matrix/blob/master/wiring.md))
+1. Install docker and docker-compose
+1. change the `environment` section in `docker-compose.yml` file to match
+ your led sign settings. For example, a single 32x64 matrix would have the
+ below values:
+
+![led matrix dimensions](https://user-images.githubusercontent.com/36345325/163526356-51c4ea4d-3630-48b4-bb63-e9e6e00ecbd2.png)
+
+If you have a single matrix, set `LED_MATRIX_COUNT` to 1, for a chain of 2, set
+ it to 2 and so on.
+ 
+1. Run the website with:
 ```
 sudo docker-compose up
 ```
 **Note:** we use sudo to give docker access to the pi's GPIO pins.
 
-5. After some time, the website should appear, accessible from port 80 on the pi:
+6. After some time, the website should appear, accessible from port 80 on the pi:
 ![image](https://user-images.githubusercontent.com/36345325/140591851-08f9b5b5-c92d-4286-a5c8-60ceb5c45ba1.png)
 
 The random button yields a random phrase and colors to test the sign:
