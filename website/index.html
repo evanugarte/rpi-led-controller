@@ -148,6 +148,12 @@
         <input id="scroll-speed" min="1" max="20" step="1" type="range" class="form-control-range" value="10" />
       </label>
     </div>
+    <div class="sign-input">
+      <label>
+        Brightness
+        <input id="brightness" min="1" max="100" step="1" type="range" class="form-control-range" value="48" />
+      </label>
+    </div>
     <div class="button-container">
       <button id="turn-off-btn" hidden="true">Turn off Sign</button>
       <button id="random-btn">Generate something random!</button>
@@ -160,6 +166,7 @@
     let backgroundColorInput = document.getElementById('background-color-input');
     let borderColorInput = document.getElementById('border-color-input');
     let scrollSpeedInput = document.getElementById('scroll-speed');
+    let brightnessInput = document.getElementById('brightness');
 
     let turnOffButton = document.getElementById('turn-off-btn');
     let randomButton = document.getElementById('random-btn');
@@ -195,7 +202,7 @@
     }
 
     async function healthCheck() {
-      const result = await sendHttpGet('/api/health-check');
+      const result = await sendHttpGet('./api/health-check');
       // assume if the response has a text field we have the other fields too
       if (result.text) {
         fillInputsWithSignMessage(result);
@@ -204,7 +211,7 @@
     }
 
     async function turnOffSign() {
-      const result = await sendHttpGet('/api/turn-off');
+      const result = await sendHttpGet('./api/turn-off');
       if (result) {
         turnOffButton.setAttribute('hidden', 'true');
         textInput.value = '';
@@ -215,7 +222,7 @@
     }
 
     async function getRandomMessage() {
-      const result = await sendHttpGet('/api/random');
+      const result = await sendHttpGet('./api/random');
       if (result.text) {
         fillInputsWithSignMessage(result);
       }
@@ -227,6 +234,7 @@
       const { value: backgroundColor } = backgroundColorInput;
       const { value: borderColor } = borderColorInput;
       const { value: scrollSpeed } = scrollSpeedInput;
+      const { value: brightness } = brightnessInput;
 
       const url = new URL('./api/update-sign', window.location.href)
       fetch(url.href, {
@@ -241,6 +249,7 @@
           backgroundColor,
           borderColor,
           scrollSpeed,
+          brightness,
         })
       }).then(() => {
         // show success
@@ -276,5 +285,4 @@
   </script>
 
 </body>
-
 </html>
