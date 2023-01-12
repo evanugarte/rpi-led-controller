@@ -11,6 +11,7 @@ class SignMessage:
     self.text_color = data.get("textColor", "")
     self.border_color = data.get("borderColor", "")
     self.text = data.get("text", "")
+    self.brightness = str(data.get("brightness", 100))
     # predefined LED sign dimesions. See README.md for how to
     # set these values.
     self.led_matrix_rows = getenv("LED_MATRIX_ROWS")
@@ -34,6 +35,7 @@ class SignMessage:
         "-s", self.scroll_speed,
         "-B", self.hex_to_rgb(self.background_color),
         "-C", self.hex_to_rgb(self.text_color),
+        "--led-brightness", self.brightness,
         "-O", self.hex_to_rgb(self.border_color),
         "-f", self.led_sign_directory + "10x20.bdf",
         "-y", "5",
