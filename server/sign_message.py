@@ -4,19 +4,24 @@ CURRENT_DIR = path.dirname(path.abspath(__file__)) + sep
 
 
 class SignMessage:
-  def __init__(self, data, led_sign_directory=CURRENT_DIR):
-    self.led_sign_directory = led_sign_directory
+  def __init__(
+      self,
+      data,
+      led_matrix_rows,
+      led_matrix_columns,
+      led_matrix_count,
+      led_sign_directory=CURRENT_DIR
+  ):
     self.scroll_speed = str(data.get("scrollSpeed", ""))
     self.background_color = data.get("backgroundColor", "")
     self.text_color = data.get("textColor", "")
     self.border_color = data.get("borderColor", "")
     self.text = data.get("text", "")
     self.brightness = str(data.get("brightness", 100))
-    # predefined LED sign dimesions. See README.md for how to
-    # set these values.
-    self.led_matrix_rows = getenv("LED_MATRIX_ROWS")
-    self.led_matrix_columns = getenv("LED_MATRIX_COLUMNS")
-    self.led_matrix_count = getenv("LED_MATRIX_COUNT")
+    self.led_matrix_rows = led_matrix_rows
+    self.led_matrix_columns = led_matrix_columns
+    self.led_matrix_count = led_matrix_count
+    self.led_sign_directory = led_sign_directory
 
   def hex_to_rgb(self, hex_value):
       return ",".join([str(int(hex_value[i:i+2], 16)) for i in (1, 3, 5)])
