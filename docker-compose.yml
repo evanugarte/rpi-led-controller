@@ -1,4 +1,4 @@
-version: '2'
+version: '3.6'
 services:
   server:
     container_name: server
@@ -8,12 +8,11 @@ services:
     ports:
       - '8080:8080'
     restart: 'on-failure'
-    environment:
-      - LED_MATRIX_ROWS=32
-      - LED_MATRIX_COLUMNS=64
-      - LED_MATRIX_COUNT=2
-    networks:
-      - local
+    command:
+      - --port=8080
+      - --led_matrix_rows=${LED_MATRIX_ROWS}
+      - --led_matrix_columns=${LED_MATRIX_COLUMNS}
+      - --led_matrix_count=${LED_MATRIX_COUNT}
     privileged: true
   website:
     container_name: website
@@ -23,12 +22,3 @@ services:
     ports:
       - '80:80'
     restart: 'on-failure'
-    networks:
-      - local
-networks:
-  local:
-    driver: bridge
-    ipam:
-      config:
-        - subnet: 172.16.0.0/24
-          gateway: 172.16.0.254

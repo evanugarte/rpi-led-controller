@@ -1,9 +1,40 @@
-from flask import Flask, request, jsonify
+import argparse
 from os import sep, path
 import random
 import subprocess
 
 from sign_message import SignMessage
+
+from flask import Flask, request, jsonify
+
+parser = argparse.ArgumentParser()
+parser.add_argument(
+    "--host",
+    default="0.0.0.0",
+    help="The network interface for the server to listen on. Default is 0.0.0.0",
+)
+parser.add_argument(
+    "--port",
+    help="The port for the server to listen on.",
+    required=True,
+    type=int,
+)
+parser.add_argument(
+    "--led_matrix_rows",
+    help="The number of rows in the LED matrix attached to the Pi. See the README for more information.",
+    required=True,
+)
+parser.add_argument(
+    "--led_matrix_columns",
+    help="The number of columns in an LED matrix attached to the Pi. See the README for more information.",
+    required=True,
+)
+parser.add_argument(
+    "--led_matrix_count",
+    help="The number of LED matrices daisy chained together. See the README for more information.",
+    required=True,
+)
+args = parser.parse_args()
 
 proc = None
 sign_message = None
@@ -68,7 +99,12 @@ def update_sign():
         proc.kill()
     try:
         if data and len(data):
-            sign_message = SignMessage(data)
+            sign_message = SignMessage(
+                data,
+                args.led_matrix_rows,
+                args.led_matrix_columns,
+                args.led_matrix_count,
+            )
             proc = subprocess.Popen(sign_message.to_subprocess_command())
         success = True
         return jsonify({
@@ -80,4 +116,4 @@ def update_sign():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080, debug=True, threaded=True)
+    app.run(host=args.host, port=args.port, debug=True, threaded=True)
